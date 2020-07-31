@@ -3,10 +3,10 @@
 -- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
 
-CREATE TABLE "Sports" (
+CREATE TABLE "Sport" (
     "id" serial   NOT NULL,
     "Sport" varchar   NOT NULL,
-    CONSTRAINT "pk_Sports" PRIMARY KEY (
+    CONSTRAINT "pk_Sport" PRIMARY KEY (
         "id"
      )
 );
@@ -15,8 +15,6 @@ CREATE TABLE "Country" (
     "id" serial   NOT NULL,
     "Country_code" varchar   NOT NULL,
     "Country" varchar   NOT NULL,
-    "Population" int   NOT NULL,
-    "GDP" int   NOT NULL,
     CONSTRAINT "pk_Country" PRIMARY KEY (
         "id"
      )
@@ -32,55 +30,61 @@ CREATE TABLE "Athlete" (
      )
 );
 
-CREATE TABLE "Olympics" (
+CREATE TABLE "Olympic_Season" (
     "id" serial   NOT NULL,
     "City" varchar   NOT NULL,
     "Year" int   NOT NULL,
     "Season" varchar   NOT NULL,
-    "Sport_id" int   NOT NULL,
-    CONSTRAINT "pk_Olympics" PRIMARY KEY (
+    CONSTRAINT "pk_Olympic_Season" PRIMARY KEY (
         "id"
      )
 );
 
-CREATE TABLE "Events" (
+CREATE TABLE "Event" (
     "id" serial   NOT NULL,
     "Event_name" varchar   NOT NULL,
     "Athlete_id" int   NOT NULL,
     "Sport_id" int   NOT NULL,
-    CONSTRAINT "pk_Events" PRIMARY KEY (
+    "Olympic_season_id" int   NOT NULL,
+    CONSTRAINT "pk_Event" PRIMARY KEY (
         "id"
      )
 );
 
-CREATE TABLE "Medal_winners" (
-    "id" serial   NOT NULL,
+CREATE TABLE "Athlete_event" (
+    "Athlete_id" int   NOT NULL,
     "Medal" varchar   NOT NULL,
+    "Event_id" int   NOT NULL
+);
+
+CREATE TABLE "Country_stats" (
+    "Year" int   NOT NULL,
     "Country_id" int   NOT NULL,
-    "Event_id" int   NOT NULL,
-    CONSTRAINT "pk_Medal_winners" PRIMARY KEY (
-        "id"
+    "Population" int,
+    "GDP" int,
+    CONSTRAINT "pk_Country_stats" PRIMARY KEY (
+        "Year","Country_id"
      )
 );
 
 ALTER TABLE "Athlete" ADD CONSTRAINT "fk_Athlete_Nationality" FOREIGN KEY("Nationality")
 REFERENCES "Country" ("id");
 
-ALTER TABLE "Olympics" ADD CONSTRAINT "fk_Olympics_Sport_id" FOREIGN KEY("Sport_id")
-REFERENCES "Sports" ("id");
-
-ALTER TABLE "Events" ADD CONSTRAINT "fk_Events_Athlete_id" FOREIGN KEY("Athlete_id")
+ALTER TABLE "Event" ADD CONSTRAINT "fk_Event_Athlete_id" FOREIGN KEY("Athlete_id")
 REFERENCES "Athlete" ("id");
 
-ALTER TABLE "Events" ADD CONSTRAINT "fk_Events_Sport_id" FOREIGN KEY("Sport_id")
-REFERENCES "Sports" ("id");
+ALTER TABLE "Event" ADD CONSTRAINT "fk_Event_Sport_id" FOREIGN KEY("Sport_id")
+REFERENCES "Sport" ("id");
 
-ALTER TABLE "Medal_winners" ADD CONSTRAINT "fk_Medal_winners_id" FOREIGN KEY("id")
+ALTER TABLE "Event" ADD CONSTRAINT "fk_Event_Olympic_season_id" FOREIGN KEY("Olympic_season_id")
+REFERENCES "Olympic_Season" ("id");
+
+ALTER TABLE "Athlete_event" ADD CONSTRAINT "fk_Athlete_event_Athlete_id" FOREIGN KEY("Athlete_id")
 REFERENCES "Athlete" ("id");
 
-ALTER TABLE "Medal_winners" ADD CONSTRAINT "fk_Medal_winners_Country_id" FOREIGN KEY("Country_id")
+ALTER TABLE "Athlete_event" ADD CONSTRAINT "fk_Athlete_event_Event_id" FOREIGN KEY("Event_id")
+REFERENCES "Event" ("id");
+
+ALTER TABLE "Country_stats" ADD CONSTRAINT "fk_Country_stats_Country_id" FOREIGN KEY("Country_id")
 REFERENCES "Country" ("id");
-
-ALTER TABLE "Medal_winners" ADD CONSTRAINT "fk_Medal_winners_Event_id" FOREIGN KEY("Event_id")
-REFERENCES "Events" ("id");
 
