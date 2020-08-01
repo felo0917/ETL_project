@@ -32,8 +32,8 @@ CREATE TABLE "Athlete" (
 
 CREATE TABLE "Olympic_Season" (
     "id" serial   NOT NULL,
-    "City" varchar   NOT NULL,
     "Year" int   NOT NULL,
+    "City" varchar   NOT NULL,
     "Season" varchar   NOT NULL,
     CONSTRAINT "pk_Olympic_Season" PRIMARY KEY (
         "id"
